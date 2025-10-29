@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metin2 Boss Hatırlatıcı 🗡️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 56px 30px 30px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            text-align: center;
+            width: 100%;
+            max-width: none;
+            height: 100%;
+            max-height: none;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .emoji {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 1em;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2em;
+            text-align: center;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-weight: bold;
+        }
+
+        input[type="number"]:focus {
+            outline: 2px solid #4CAF50;
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+
+        small {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8em;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .save-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .save-btn:active {
+            transform: translateY(0);
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.85em;
+            line-height: 1.4;
+            text-align: left;
+        }
+
+        .info h3 {
+            margin-bottom: 8px;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        .info p {
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+            font-size: 0.9em;
+            line-height: 1.3;
+        }
+
+        .success {
+            background: rgba(76, 204, 80, 0.863);
+            border: 1px solid #4CAF50;
+            color: #000000;
+        }
+
+        .titlebar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px;
+            -webkit-app-region: drag;
+            background: rgba(0, 0, 0, 0.678);
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .window-controls {
+            display: flex;
+            gap: 6px;
+            -webkit-app-region: no-drag;
+        }
+        .win-btn {
+            width: 32px;
+            height: 24px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .win-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .titlebar h2 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 6px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="titlebar">
+            <h2>Metin2 Boss Hatırlatıcı</h2>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow()" title="Küçült">−</button>
+                <button class="win-btn" onclick="quitApp()" title="Kapat">×</button>
+            </div>
+        </div>
+        
+        <span class="emoji">🗡️⚔️🛡️</span>
+        <h1>Boss Hatırlatıcı</h1>
+        
+        <div class="input-group">
+            <label for="bossDigit">Boss saatlerinin son rakamı (0-9):</label>
+            <input type="number" id="bossDigit" min="0" max="9" value="5" placeholder="5">
+            <small>Örnek: 7 girerseniz → 09:37, 11:07 vs. olur</small>
+        </div>
+
+        <div class="input-group">
+            <label for="soundSelect">Bildirim sesi (sounds klasöründen):</label>
+            <select id="soundSelect" style="width:100%; padding:12px; border-radius:8px; font-weight:bold; color:#333;">
+                <option value="">Varsayılan (gömülü)</option>
+            </select>
+            <small>Yeni ses eklemek için proje klasöründeki 'sounds' klasörüne .mp3/.wav/.ogg koy.</small>
+        </div>
+
+        <div class="input-group">
+            <label for="reminderMinutes">Boss saatinden kaç dakika önce uyarı?</label>
+            <input type="number" id="reminderMinutes" min="1" max="60" value="5" placeholder="5">
+        </div>
+
+        <button id="saveBtn" class="save-btn" onclick="saveSettings()">
+            💾 Ayarları Kaydet ve Başlat
+        </button>
+
+        <button id="testBtn" class="save-btn" style="margin-top:10px; background: linear-gradient(45deg, #ff9800, #f57c00);" onclick="testWarning()">
+            🚨 Test Uyarı (Hemen Dene)
+        </button>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        async function saveSettings() {
+            const bossDigit = document.getElementById('bossDigit').value;
+            const reminderMinutes = document.getElementById('reminderMinutes').value;
+            const selectedSoundPath = document.getElementById('soundSelect').value;
+            
+            if (bossDigit === '' || bossDigit < 0 || bossDigit > 9) {
+                alert('❌ Lütfen 0-9 arası boss son rakamı girin!');
+                return;
+            }
+            
+            if (!reminderMinutes || reminderMinutes < 1 || reminderMinutes > 60) {
+                alert('❌ Lütfen 1-60 arası uyarı dakikası girin!');
+                return;
+            }
+
+            try {
+                const result = await ipcRenderer.invoke('save-settings', {
+                    bossMinuteDigit: parseInt(bossDigit),
+                    reminderMinutes: parseInt(reminderMinutes),
+                    selectedSoundPath: selectedSoundPath || ''
+                });
+                
+                if (result.success) {
+                    const status = document.getElementById('status');
+                    const saveBtn = document.getElementById('saveBtn');
+                    const testBtn = document.getElementById('testBtn');
+                    // Butonları gizle
+                    if (saveBtn) saveBtn.style.display = 'none';
+                    if (testBtn) testBtn.style.display = 'none';
+
+                    status.innerHTML = `✅ Ayarlar kaydedildi!<br>
+                    🎯 Boss saatlerinin son rakamı: ${bossDigit}<br>
+                    🔜 Sonraki boss saati: ${result.nextBoss}<br>
+                    ⏰ Uyarı: ${reminderMinutes} dakika önce`;
+                    status.className = 'status success';
+                    status.style.display = 'block';
+
+                    setTimeout(() => {
+                        status.style.display = 'none';
+                        // Butonları geri göster
+                        if (saveBtn) saveBtn.style.display = '';
+                        if (testBtn) testBtn.style.display = '';
+                    }, 5000);
+                } else {
+                    alert('❌ Ayarlar kaydedilemedi!');
+                }
+            } catch (error) {
+                console.error('Hata:', error);
+                alert('❌ Bir hata oluştu!');
+            }
+        }
+
+        function minimizeWindow() {
+            ipcRenderer.invoke('minimize-main');
+        }
+
+        function quitApp() {
+            ipcRenderer.invoke('quit-app');
+        }
+
+        async function testWarning() {
+            try {
+                await ipcRenderer.invoke('test-warning');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Enter tuş desteği
+        document.getElementById('bossDigit').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('reminderMinutes').focus();
+            }
+        });
+
+        document.getElementById('reminderMinutes').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                saveSettings();
+            }
+        });
+
+        // İlk yüklendiğinde mevcut ayarları al
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const status = await ipcRenderer.invoke('get-status');
+                document.getElementById('bossDigit').value = status.bossMinuteDigit;
+                document.getElementById('reminderMinutes').value = status.reminderMinutes;
+
+                const sounds = await ipcRenderer.invoke('list-sounds');
+                const select = document.getElementById('soundSelect');
+                sounds.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.path;
+                    opt.textContent = s.name;
+                    select.appendChild(opt);
+                });
+                if (status.selectedSoundPath) {
+                    select.value = status.selectedSoundPath;
+                }
+            } catch (error) {
+                console.error('Başlangıç ayarları alınamadı:', error);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 BOSS UYARI!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        .warning-popup {
+            border-radius: 12px;
+            border: 0px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            width: 95%;
+            max-width: none;
+            height: 95%;
+            max-height: none;
+            position: relative;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: alertPulse 1s infinite alternate;
+        }
+
+        @keyframes alertPulse {
+            from { 
+                transform: scale(1); 
+            }
+            to { 
+                transform: scale(1.02); 
+            }
+        }
+
+        .warning-emoji {
+            margin-top: 10px;
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: block;
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        .warning-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .warning-message {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .time-display {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            letter-spacing: 1px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .sound-warning {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #feca57;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 0.8em;
+            font-weight: bold;
+            animation: soundPulse 0.5s infinite;
+        }
+
+        @keyframes soundPulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .boss-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+
+        .close-x {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .close-x:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-popup">
+        <div class="sound-warning">🔊 SES AÇIK!</div>
+        
+        <span class="warning-emoji">⚔️🗡️⚔️</span>
+        
+        <h1 class="warning-title">BOSS VAR!</h1>
+        
+        <div class="warning-message">
+            <strong>🚨 DİKKAT! METIN2 BOSS ZAMANI GELDİ!</strong>
+            <br>
+            Boss saatine <span id="minutesLeft"></span> dakika kaldı!
+        </div>
+
+        <div class="time-display">
+            ⏰ Boss Saati: <span id="bossTime"></span>
+        </div>
+
+        <div class="boss-info">
+            🗻 Metin Dağı Boss'u her 1.5 saatte bir çıkıyor!<br>
+            🎯 Hazır ol ve ekibini topla!
+        </div>
+
+        <div class="button-group">
+            <button class="close-btn" onclick="closeWarning()">
+                ✅ Anladım, Kapat
+            </button>
+            <button class="close-btn" onclick="snoozeWarning()">
+                ⏰ 1 Dakika Ertele
+            </button>
+        </div>
+    </div>
+
+    <audio id="alertSound" loop></audio>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        let snoozeTimeout;
+
+        function playAlertSound() {
+            const audio = document.getElementById('alertSound');
+            const urlParams = new URLSearchParams(window.location.search);
+            const soundPath = urlParams.get('soundPath');
+            if (soundPath) {
+                audio.src = soundPath;
+            } else {
+                audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAaW5mbyBiaXAKAAAA';
+            }
+            audio.play().catch(e => console.log('Ses çalınamadı:', e));
+        }
+
+        async function closeWarning() {
+            const audio = document.getElementById('alertSound');
+            audio.pause();
+            if (snoozeTimeout) clearTimeout(snoozeTimeout);
+            
+            try {
+                await ipcRenderer.invoke('close-warning');
+            } catch (error) {
+                console.error('Kapatma hatası:', error);
+            }
+        }
+
+        async function snoozeWarning() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const bossTime = urlParams.get('bossTime') || '00:00';
+                // Ana proseste snooze kur ve mevcut popup'ı kapat
+                await ipcRenderer.invoke('snooze-warning', { bossTime, delayMs: 60000 });
+                await closeWarning();
+            } catch (e) {
+                console.error('Snooze hatası:', e);
+            }
+        }
+
+        function updateDisplay() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bossTime = urlParams.get('bossTime') || '00:00';
+            const minutesLeft = urlParams.get('minutesLeft') || '0';
+
+            document.getElementById('bossTime').textContent = bossTime;
+            document.getElementById('minutesLeft').textContent = minutesLeft;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDisplay();
+            playAlertSound();
+            
+            // ESC ve Enter tuşları ile kapat
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' || e.key === 'Enter') {
+                    closeWarning();
+                }
+            });
+        });
+
+        // Pencere kapanırken ses durdur
+        window.addEventListener('beforeunload', function() {
+            const audio = document.getElementById('alertSound');
+            audio.pause();
+        });
+    </script>
+</body>
+</html>

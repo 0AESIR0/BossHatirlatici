@@ -1,0 +1,23 @@
+{
+  "name": "bosshatirlatici",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "web": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "node-cron": "^4.2.1",
+    "open": "^8.4.2"
+  },
+  "devDependencies": {
+    "electron": "^38.1.2"
+  }
+}
