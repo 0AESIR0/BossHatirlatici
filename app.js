@@ -12,11 +12,26 @@ app.use(express.static(__dirname));
 
 // Boss base saatleri - dakika son rakamı UI'dan ayarlanacak
 const BOSS_BASE_TIMES = [
-    '00:3', '02:0', '03:3', '05:0',
-    '06:3', '08:0', '09:3', '11:0', 
-    '12:3', '14:0', '15:3', '17:0',
-    '18:3', '20:0', '21:3', '23:0'
+    '11:3', '13:0', '14:3', '16:0',
+    '17:3', '19:0', '20:3', '22:0',
+    '23:3', '01:0', '02:3', '04:0',
+    '05:3', '07:0', '08:3', '10:0'
 ];
+
+//const BOSS_BASE_TIMES = [
+//    '12:0', '13:3', '15:0', '16:3',
+//    '18:0', '19:3', '21:0', '22:3',
+//    '00:0', '01:3', '03:0', '04:3',
+//    '06:0', '07:3', '09:0', '10:3'
+//];
+
+// Boss base saatleri - dakika son rakamı UI'dan ayarlanacak
+//const BOSS_BASE_TIMES = [
+//    '00:3', '02:0', '03:3', '05:0',
+//    '06:3', '08:0', '09:3', '11:0', 
+//    '12:3', '14:0', '15:3', '17:0',
+//    '18:3', '20:0', '21:3', '23:0'
+// ];
 
 let bossMinuteDigit = 5; // UI'dan ayarlanacak son rakam
 let BOSS_TIMES = []; // Dinamik olarak oluşturulacak
